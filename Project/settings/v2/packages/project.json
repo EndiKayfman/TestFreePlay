@@ -1,0 +1,42 @@
+{
+  "__version__": "1.0.4",
+  "layer": [
+    {
+      "name": "CarLayer",
+      "value": 2
+    },
+    {
+      "name": "WheelLayer",
+      "value": 4
+    }
+  ],
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "BrigdePiece"
+      },
+      {
+        "index": 2,
+        "name": "CarpPiece"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 3,
+      "1": 1,
+      "2": 0
+    },
+    "gravity": {
+      "y": -30
+    }
+  },
+  "custom_joint_texture_layouts": [],
+  "general": {
+    "designResolution": {
+      "fitHeight": true,
+      "width": 412,
+      "height": 846,
+      "fitWidth": true
+    }
+  }
+}
