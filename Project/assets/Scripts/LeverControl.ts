@@ -7,8 +7,8 @@ export class LeverControl extends Component {
     car: Node = null; // —сылка на машину
 
     private initialY: number = 0;
-    private minY: number = -48;
-    private maxY: number = 51;
+    private minY: number = -52;
+    private maxY: number = 52;
 
     onLoad() {
         this.initialY = this.node.position.y;

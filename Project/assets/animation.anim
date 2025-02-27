@@ -61,6 +61,9 @@
       },
       {
         "__id__": 91
+      },
+      {
+        "__id__": 97
       }
     ],
     "_exoticAnimation": null,
@@ -865,6 +868,49 @@
     "_values": [
       true,
       false
+    ]
+  },
+  {
+    "__type__": "cc.animation.ObjectTrack",
+    "_binding": {
+      "__type__": "cc.animation.TrackBinding",
+      "path": {
+        "__id__": 98
+      },
+      "proxy": null
+    },
+    "_channel": {
+      "__id__": 100
+    }
+  },
+  {
+    "__type__": "cc.animation.TrackPath",
+    "_paths": [
+      {
+        "__id__": 99
+      },
+      "isTrigger"
+    ]
+  },
+  {
+    "__type__": "cc.animation.ComponentPath",
+    "component": "cc.BoxCollider"
+  },
+  {
+    "__type__": "cc.animation.Channel",
+    "_curve": {
+      "__id__": 101
+    }
+  },
+  {
+    "__type__": "cc.ObjectCurve",
+    "_times": [
+      0,
+      0.016666666666666666
+    ],
+    "_values": [
+      false,
+      true
     ]
   }
 ]

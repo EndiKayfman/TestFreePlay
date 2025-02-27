@@ -1,9 +1,16 @@
-import { _decorator, Component, Collider, Node, Label, tween, UIOpacity, Vec3, director, sys, ITriggerEvent, Animation } from 'cc';
+import { _decorator, Component, Collider, Node, Label, tween, UIOpacity, Vec3, director, sys, ITriggerEvent, Animation, RigidBody } from 'cc';
+import { TriggerManager } from './TriggerManager';
 
 const { ccclass, property } = _decorator;
 
 @ccclass('RoadFinish')
 export class RoadFinish extends Component {
+
+    @property(Node)
+    car: Node | null = null;
+
+    @property(Node)
+    triggerManagerNode: Node | null = null; // Объект, где висит TriggerManager
 
     @property(Animation)
     carAnimation: Animation | null = null;
@@ -48,12 +55,26 @@ export class RoadFinish extends Component {
             this.scheduleOnce(() => {
                 this.showFailScreen();
             }, 1.5); // Задержка 1.5 секунды перед появлением "FAIL"
+
+            if (this.triggerManagerNode) {
+                let manager = this.triggerManagerNode.getComponent(TriggerManager);
+                if (manager) {
+                    manager.makeCollidersTrigger();
+                } else {
+                    console.error("TriggerManager не найден на объекте triggerManager!");
+                }
+            } else {
+                console.error("triggerManager не назначен в инспекторе!");
+            }
         }
 
         let car = event.otherCollider.node.getComponent('CarController');
         if (car) {
             car.stopCar();
         }
+
+        // Останавливаем следование камеры
+        this.stopCameraFollow();
     }
 
     showFailScreen() {
@@ -94,5 +115,45 @@ export class RoadFinish extends Component {
                     .to(0.5, { scale: new Vec3(1, 1, 1) }) // Возвращение к исходному размеру
             )
             .start();
+    }
+
+    scatterCar() {
+        let children = this.car!.children; // Получаем список дочерних объектов
+        this.car!.removeAllChildren(); // Отсоединяем все элементы от родителя
+
+        children.forEach(child => {
+            let rb = child.getComponent(RigidBody);
+            if (!rb) {
+                rb = child.addComponent(RigidBody);
+            }
+
+            // Делаем объект динамическим, чтобы на него действовала физика
+            rb.mass = 1;
+            rb.useGravity = true;
+
+            // Придаем случайный импульс для разлета
+            let randomDirection = new Vec3(
+                (Math.random() - 0.5) * 10, // Горизонтальный разброс
+                Math.random() * 5 + 5, // Подпрыгивание вверх
+                (Math.random() - 0.5) * 10 // Глубина
+            );
+
+            rb.applyImpulse(randomDirection);
+        });
+
+        console.log("Машина рассыпалась!");
+    }
+
+    stopCameraFollow() {
+        let cameraNode = director.getScene()?.getChildByName("Main Camera");
+        if (cameraNode) {
+            let cameraScript = cameraNode.getComponent("CameraFollow"); // Указываем название твоего скрипта
+            if (cameraScript) {
+                cameraScript.stopFollowing(); // Останавливаем следование камеры
+                console.log("Камера остановлена!");
+            }
+        } else {
+            console.error("Камера не найдена!");
+        }
     }
 }
